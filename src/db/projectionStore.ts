@@ -1,7 +1,7 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { BankDisplay } from "../models/displays";
 import docClient from "./databaseConnection";
+import { ProjectionDisplay } from "../models/displays";
 
 class ProjectionStore {
     private docClient: DynamoDBDocumentClient;
@@ -10,11 +10,11 @@ class ProjectionStore {
         this.docClient = docClient;
     }
 
-    async save(bankDisplay: BankDisplay): Promise<void> {
+    async saveProjection(projectionDisplay: ProjectionDisplay): Promise<void> {
         try {
             const command = new PutCommand({
                 TableName: "BankProjectionsTable",
-                Item: bankDisplay
+                Item: projectionDisplay
             });
             await this.docClient.send(command);
         } catch (error) {
@@ -23,26 +23,6 @@ class ProjectionStore {
         }
     }
 
-    async get(userId: string): Promise<BankDisplay | null> {
-        const command = new QueryCommand({
-            TableName: "ProjectionsTable", // Replace with your table name
-            KeyConditionExpression: "id = :userId",
-            ExpressionAttributeValues: {
-                ":userId": userId
-            }
-        });
-
-        try {
-            const response = await this.docClient.send(command);
-            if (response.Items && response.Items.length > 0) {
-                return new ProfileView(response.Items[0]);
-            }
-            return null;
-        } catch (error) {
-            console.error("Error retrieving profile view:", error);
-            return null;
-        }
-    }
 }
 
 export default ProjectionStore;

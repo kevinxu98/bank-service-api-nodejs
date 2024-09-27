@@ -7,25 +7,25 @@ import {
     Body,
     Path,
  } from "tsoa";
- import { createItem } from "../db/databaseMethods";
- import { AccountStatusDTO } from "../dtos/dtos";
- import { generateId } from "../utils/helpers";
- import { CreateBankRecordCommand } from "../commands/commands";
+import { BankCreationDTO } from "../dtos/dtos";
+import { CreateBankRecordCommand } from "../commands/commands";
 import { CreateBankRecordCommandHandler } from "../handlers/commandHandlers";
+import { EventStore } from "../db/eventStore";
 
  @Tags("Command Controllers")
  @Route("commands")
  export class CommandController extends Controller {
 
-
   @Post("createBankRecord/{firstName}/{lastName}")
-  public async createBankRecord(@Path() firstName: string, @Path() lastName : string, @Body() body: AccountStatusDTO): Promise<string> {
-    const id = generateId();
+  public async createBankRecord(@Body() body: BankCreationDTO): Promise<any> {
     try {
-      await new CreateBankRecordCommandHandler.handle(new CreateBankRecordCommand(id, firstName, lastName, body));
+      await new CreateBankRecordCommandHandler(new EventStore()).handle(
+        new CreateBankRecordCommand(body.firstName, body.lastName, body.chequingAcctBalance, body.savingsAcctBalance)
+      );
+    } catch (err) {
+      console.log(err);
+      return "Error creating bank record.";
     }
-    
-    await createItem("bankEventsTable", newBankAcct);
     return "Bank record created successfully.";
   }
 

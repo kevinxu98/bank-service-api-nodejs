@@ -1,11 +1,13 @@
-import { AccountStatusDTO } from "../dtos/dtos";
 
 export class BankAcctCreatedEvent {
+    static eventType: string = 'BankAcctCreatedEvent';
     constructor(
         public id: string,
+        public userId : string,
         public firstName: string,
         public lastName: string,
-        public acctStatus: AccountStatusDTO,
+        public chequingAcctBalance: number,
+        public savingsAcctBalance: number,
         public version: number
     ) {}
 }
