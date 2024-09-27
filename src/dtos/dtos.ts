@@ -1,12 +1,11 @@
-export interface BankCreationIdentifierDTO {
+export interface BankCreationDTO {
     id: string;
     firstName: string;
     lastName: string;
-    summary: BankCreationInfoDTO
+    acctStatus: AccountStatusDTO;
 }
 
-export interface BankCreationInfoDTO {
-    country?: string | undefined;
+export interface AccountStatusDTO {
     chequingAcctBalance: number;
     chequingAcctTransaction?: number | undefined;
     savingsAcctBalance: number;

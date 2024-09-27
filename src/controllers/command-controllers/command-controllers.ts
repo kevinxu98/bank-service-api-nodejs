@@ -8,27 +8,23 @@ import {
     Path,
  } from "tsoa";
  import { createItem } from "../../db/database-methods";
- import { BankCreationIdentifierDTO, BankCreationInfoDTO } from "../../dtos/dtos";
+ import { BankCreationDTO, AccountStatusDTO } from "../../dtos/dtos";
  import { generateId } from "../../utils/helpers";
  @Tags("Command Controllers")
  @Route("commands")
  export class CommandController extends Controller {
 
-  @Get("test-command")
-  public async getTest(): Promise<string> {
-    return "Hello World";
-  } 
 
   @Post("createBankRecord/{firstName}/{lastName}")
-  public async createBankRecord(@Path() firstName: string, @Path() lastName : string, @Body() body: BankCreationInfoDTO): Promise<string> {
+  public async createBankRecord(@Path() firstName: string, @Path() lastName : string, @Body() body: AccountStatusDTO): Promise<string> {
     const id = generateId();
-    const newBankRecord: BankCreationIdentifierDTO = {
+    const newBankAcct: BankCreationDTO = {
       id: id,
       firstName: firstName,
       lastName: lastName,
-      summary: body
+      acctStatus: body,
     }
-    await createItem("bankEvent", newBankRecord);
+    await createItem("bankEventsTable", newBankAcct);
     return "Bank record created successfully.";
   }
 
