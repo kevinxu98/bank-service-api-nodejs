@@ -7,7 +7,7 @@ import {
     Body,
     Path,
  } from "tsoa";
- import { createItem } from "../db/database-methods";
+ import { createItem } from "../db/databaseMethods";
  import { BankCreationDTO, AccountStatusDTO } from "../dtos/dtos";
  import { generateId } from "../utils/helpers";
  @Tags("Command Controllers")

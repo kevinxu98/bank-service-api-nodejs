@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { RegisterRoutes } from "./routes/routes";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger/swagger.json";
-import { initializeDatabase } from "./db/database-connection";
+import { initializeDatabase } from "./db/databaseConnection";
 
 const app = express();
 app.use(bodyParser.json());

@@ -1,4 +1,4 @@
-import { createTable } from "../db/database-methods";
+import { createTable } from "../db/databaseMethods";
 import {
     Controller,
     Get,
