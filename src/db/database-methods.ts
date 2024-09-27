@@ -1,7 +1,4 @@
-import { 
-  CreateTableCommand, 
-  DynamoDBClient
-} from "@aws-sdk/client-dynamodb";
+import { CreateTableCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutCommand, UpdateCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import dotenv from 'dotenv';
