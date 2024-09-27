@@ -6,8 +6,19 @@ import {
   DynamoDBClient
 } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import dotenv from 'dotenv';
 
-const client = new DynamoDBClient({});
+dotenv.config();
+
+const region = process.env.AWS_REGION || "us-east-1";
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+if (!accessKeyId || !secretAccessKey) {
+  throw new Error("AWS credentials are not set.");
+}
+
+const client = new DynamoDBClient({ region, credentials: { accessKeyId, secretAccessKey } });
 const docClient = DynamoDBDocumentClient.from(client);
 
 export async function createTable(tableName: string) {
@@ -17,7 +28,8 @@ export async function createTable(tableName: string) {
       { AttributeName: "id", AttributeType: "S" }
     ],
     KeySchema: [
-      { AttributeName: "id", KeyType: "HASH" }
+      { AttributeName: "id", KeyType: "HASH" } 
+
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 5,
@@ -27,11 +39,11 @@ export async function createTable(tableName: string) {
 
   try {
     const response = await docClient.send(command);
-    console.log(`Table ${tableName} created successfully`);
+    console.log(`Table created successfully.`);
     return response;
-  } catch (error) {
-    console.error(`Error creating table ${tableName}:`, error);
-    throw error;
+  } catch (err) {
+    console.error(`Error creating table: , ${err}.`);
+    throw err;
   }
 }
 
@@ -43,29 +55,34 @@ export async function createItem(tableName: string, item: Record<string, any>) {
 
   try {
     const response = await docClient.send(command);
-    console.log(`Item created successfully in ${tableName}`);
+    console.log(`Item created successfully in ${tableName}.`);
     return response;
   } catch (error) {
-    console.error(`Error creating item in ${tableName}:`, error);
+    console.error(`Error creating item in ${tableName}:, ${error}.`);
     throw error;
   }
 }
 
-export async function updateItem(tableName: string, key: Record<string, any>, updateExpression: string, expressionAttributeValues: Record<string, any>) {
+export async function updateItem(
+  tableName: string,
+  key: Record<string, any>,
+  updates: Record<string, any>
+) {
   const command = new UpdateItemCommand({
     TableName: tableName,
     Key: key,
-    UpdateExpression: updateExpression,
-    ExpressionAttributeValues: expressionAttributeValues,
+    UpdateExpression: `set ${Object.keys(updates).map(key => `#${key} = :${key}`).join(', ')}`,
+    ExpressionAttributeNames: Object.keys(updates).reduce((acc, key) => ({ ...acc, [`#${key}`]: key }), {}),
+    ExpressionAttributeValues: Object.entries(updates).reduce((acc, [key, value]) => ({ ...acc, [`:${key}`]: value }), {}),
     ReturnValues: "ALL_NEW"
   });
 
   try {
     const response = await docClient.send(command);
-    console.log(`Item updated successfully in ${tableName}`);
-    return response;
+    console.log(`Item updated successfully in ${tableName}.`);
+    return response.Attributes; 
   } catch (error) {
-    console.error(`Error updating item in ${tableName}:`, error);
+    console.error(`Error updating item in ${tableName}:, ${error}.`);
     throw error;
   }
 }
@@ -78,10 +95,10 @@ export async function deleteItem(tableName: string, key: Record<string, any>) {
 
   try {
     const response = await docClient.send(command);
-    console.log(`Item deleted successfully from ${tableName}`);
+    console.log(`Item deleted successfully from ${tableName}.`);
     return response;
   } catch (error) {
-    console.error(`Error deleting item from ${tableName}:`, error);
+    console.error(`Error deleting item from ${tableName}:, ${error}.`);
     throw error;
   }
 }
