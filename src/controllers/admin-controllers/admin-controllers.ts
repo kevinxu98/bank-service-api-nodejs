@@ -13,7 +13,7 @@ import {
  @Route("admin")
  export class AdminController extends Controller {
 
-    @Get("create-table")
+    @Post("create-table")
     public async createBankTables(): Promise<string> {
         try {
             const bankCreationArray = [createTable("bankEvent"), createTable("bankProjection")];
