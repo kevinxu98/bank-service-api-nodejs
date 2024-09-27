@@ -13,13 +13,13 @@ class ProjectionStore {
     async saveProjection(projectionDisplay: ProjectionDisplay): Promise<void> {
         try {
             const command = new PutCommand({
-                TableName: "BankProjectionsTable",
+                TableName: "bankProjectionsTable",
                 Item: projectionDisplay
             });
             await this.docClient.send(command);
-        } catch (error) {
-            console.error("Error saving profile view:", error);
-            throw error;
+        } catch (err) {
+            console.error(err);
+            throw err;
         }
     }
 

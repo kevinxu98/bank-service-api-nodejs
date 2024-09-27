@@ -26,7 +26,7 @@ class BankAggregate {
 
     createBankAcct(userId: string, firstName: string, lastName: string, chequingAcctBalance: number, savingsAcctBalance: number): BankAcctCreatedEvent {
         const id = `${BankAcctCreatedEvent.eventType}:${generateId()}`;
-        const event = new BankAcctCreatedEvent(id, userId, firstName, lastName, chequingAcctBalance, savingsAcctBalance, this.version + 1);
+        const event = new BankAcctCreatedEvent(id, userId, BankAcctCreatedEvent.eventType, firstName, lastName, chequingAcctBalance, savingsAcctBalance, this.version + 1);
         return event;
     }   
 

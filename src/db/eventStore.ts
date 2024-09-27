@@ -14,9 +14,9 @@ export class EventStore {
 
     async saveEvent(event: any, updatedProjection: ProjectionDisplay): Promise<void> {
         try {
-            const newEvent = event.toJSON();
+            const newEvent = event;
             const command = new PutCommand({
-                TableName: "BankEventsTable", 
+                TableName: "bankEventsTable", 
                 Item: newEvent
             });
             await this.docClient.send(command);
