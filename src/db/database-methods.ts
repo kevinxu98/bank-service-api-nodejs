@@ -1,10 +1,8 @@
 import { 
   CreateTableCommand, 
-  PutItemCommand, 
-  UpdateItemCommand, 
-  DeleteItemCommand,
   DynamoDBClient
 } from "@aws-sdk/client-dynamodb";
+import { PutCommand, UpdateCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import dotenv from 'dotenv';
 
@@ -48,7 +46,7 @@ export async function createTable(tableName: string) {
 }
 
 export async function createItem(tableName: string, item: Record<string, any>) {
-  const command = new PutItemCommand({
+  const command = new PutCommand({
     TableName: tableName,
     Item: item
   });
@@ -68,7 +66,7 @@ export async function updateItem(
   key: Record<string, any>,
   updates: Record<string, any>
 ) {
-  const command = new UpdateItemCommand({
+  const command = new UpdateCommand({
     TableName: tableName,
     Key: key,
     UpdateExpression: `set ${Object.keys(updates).map(key => `#${key} = :${key}`).join(', ')}`,
@@ -88,7 +86,7 @@ export async function updateItem(
 }
 
 export async function deleteItem(tableName: string, key: Record<string, any>) {
-  const command = new DeleteItemCommand({
+  const command = new DeleteCommand({
     TableName: tableName,
     Key: key
   });

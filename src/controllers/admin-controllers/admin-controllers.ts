@@ -16,7 +16,7 @@ import {
     @Post("create-table")
     public async createBankTables(): Promise<string> {
         try {
-            const bankCreationArray = [createTable("bankEvent"), createTable("bankProjection")];
+            const bankCreationArray = [createTable("bankEventsTable"), createTable("bankProjectionsTable")];
             await Promise.all(bankCreationArray);
             return "Tables created successfully.";
         } catch (error) {

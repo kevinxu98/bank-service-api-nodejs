@@ -21,9 +21,9 @@ import {
 
   @Post("createBankRecord/{firstName}/{lastName}")
   public async createBankRecord(@Path() firstName: string, @Path() lastName : string, @Body() body: BankCreationInfoDTO): Promise<string> {
-    const userId = generateId();
+    const id = generateId();
     const newBankRecord: BankCreationIdentifierDTO = {
-      id: userId,
+      id: id,
       firstName: firstName,
       lastName: lastName,
       summary: body
