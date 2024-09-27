@@ -7,9 +7,9 @@ import {
     Body,
     Path,
  } from "tsoa";
- import { createItem } from "../../db/database-methods";
- import { BankCreationDTO, AccountStatusDTO } from "../../dtos/dtos";
- import { generateId } from "../../utils/helpers";
+ import { createItem } from "../db/database-methods";
+ import { BankCreationDTO, AccountStatusDTO } from "../dtos/dtos";
+ import { generateId } from "../utils/helpers";
  @Tags("Command Controllers")
  @Route("commands")
  export class CommandController extends Controller {
