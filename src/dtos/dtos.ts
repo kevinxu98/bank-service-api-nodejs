@@ -3,6 +3,7 @@ export interface BankCreationDTO {
     firstName: string;
     lastName: string;
     acctStatus: AccountStatusDTO;
+    version: number;
 }
 
 export interface AccountStatusDTO {
