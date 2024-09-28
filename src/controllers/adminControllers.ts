@@ -21,7 +21,7 @@ import {
             return "Tables created successfully.";
         } catch (error) {
             console.log(error);
-            return "Error creating tables";
+            return `${error}`;
         }
     }
  }
