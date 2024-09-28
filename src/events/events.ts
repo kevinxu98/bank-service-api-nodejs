@@ -4,7 +4,7 @@ export class BankAcctCreatedEvent {
     constructor(
         public id: string,
         public userId : string,
-        public eventType: string,
+        public type: string,
         public firstName: string,
         public lastName: string,
         public chequingAcctBalance: number,

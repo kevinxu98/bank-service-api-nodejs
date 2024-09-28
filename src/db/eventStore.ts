@@ -27,6 +27,22 @@ export class EventStore {
         await new BankEventHandler().updateProjections(updatedProjection);
     }
 
+    async getEvents(userId: string): Promise<any> {
+        try {
+            const command = new QueryCommand({
+                TableName: "bankEventsTable",
+                KeyConditionExpression: "userId = :userId",
+                ExpressionAttributeValues: {
+                    ":userId": { S: userId }
+                }
+            });
+            const response = await this.docClient.send(command);
+            return response.Items;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 export default EventStore;
