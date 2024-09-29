@@ -36,7 +36,7 @@ export class ChequingDepositCommandHandler {
     async handle(command: any): Promise<any> {
         const { id, amount } = command;
         const bankAggregate = new BankAggregate(id);
-        bankAggregate.hydrateAggregate();
+        await bankAggregate.hydrateAggregate();
         
         const event = bankAggregate.depositChequingAcct(id, amount);
         const updatedProjection = bankAggregate.projectionDisplay();

@@ -34,7 +34,7 @@ export class EventStore {
                 TableName: "bankEventsTable",
                 FilterExpression: "userId = :userId",
                 ExpressionAttributeValues: {
-                    ":userId": userId // Use plain JavaScript object
+                    ":userId": userId
                 }
             });
             const response = await this.docClient.send(command);

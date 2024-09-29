@@ -23,24 +23,22 @@ class BankAggregate {
         this.eventStore = new EventStore();
     }
 
-    async hydrateAggregate(): Promise<BankAggregate> {
+    async hydrateAggregate(): Promise<void> {
         const events = await this.eventStore.getEventsByUserId(this.id);
-        const aggregate = new BankAggregate('', 0);
         for (const event of events) {
-            aggregate.apply(event);
+            this.applyState(event);
         }
-        return aggregate;
     }
 
-    apply(event: any): void {
-        if (event instanceof BankAcctCreatedEvent) {
+    applyState(event: any): void {
+        if (event.type = BankAcctCreatedEvent.eventType) {
             this.id = event.userId;
             this.version = event.version;
             this.firstName = event.firstName;
             this.lastName = event.lastName;
             this.chequingAcctBalance = event.chequingAcctBalance;
             this.savingsAcctBalance = event.savingsAcctBalance;
-        } else if (event instanceof ChequingDepositEvent) {
+        } else if (event.type = ChequingDepositEvent.eventType) {
             this.id = event.userId;
             this.version = event.version;
             this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) + event.amount;
@@ -50,7 +48,7 @@ class BankAggregate {
     createBankAcct(userId: string, firstName: string, lastName: string, chequingAcctBalance: number, savingsAcctBalance: number): BankAcctCreatedEvent {
         const id = generateId();
         const event = new BankAcctCreatedEvent(id, userId, BankAcctCreatedEvent.eventType, firstName, lastName, chequingAcctBalance, savingsAcctBalance, this.version + 1);
-        this.apply(event);
+        this.applyState(event);
         return event;
     }
 
@@ -58,7 +56,7 @@ class BankAggregate {
         const id = generateId();
         this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) + amount;
         const event = new ChequingDepositEvent(id, userId, ChequingDepositEvent.eventType, amount, this.version + 1);
-        this.apply(event);
+        this.applyState(event);
         return event;
     }
 
@@ -66,7 +64,7 @@ class BankAggregate {
         const id = generateId();
         this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) - amount;
         const event = new ChequingWithdrawalEvent(id, userId, ChequingWithdrawalEvent.eventType, amount, this.version + 1);
-        this.apply(event);
+        this.applyState(event);
         return event;
     }
 
@@ -74,7 +72,7 @@ class BankAggregate {
         const id = generateId();
         this.savingsAcctBalance = (this.savingsAcctBalance ?? 0) + amount;
         const event = new SavingsDepositEvent(id, userId, SavingsDepositEvent.eventType, amount, this.version + 1);
-        this.apply(event);
+        this.applyState(event);
         return event;
     }
 
@@ -82,7 +80,7 @@ class BankAggregate {
         const id = generateId();
         this.savingsAcctBalance = (this.savingsAcctBalance ?? 0) - amount;
         const event = new SavingsWithdrawalEvent(id, userId, SavingsWithdrawalEvent.eventType, amount, this.version + 1);
-        this.apply(event);
+        this.applyState(event);
         return event;
     }
 
