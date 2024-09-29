@@ -38,7 +38,7 @@ import { EventStore } from "../db/eventStore";
       );
     } catch (err) {
       console.log(err);
-      return "Error depositing into chequing account.";
+      return `${err}`;
     }
     return "Chequing account deposit successful.";
   }
@@ -51,7 +51,7 @@ import { EventStore } from "../db/eventStore";
       );
     } catch (err) {
       console.log(err);
-      return "Error withdrawing from chequing account.";
+      return `${err}`;
     }
     return "Chequing account withdrawal successful.";
   }
@@ -64,7 +64,7 @@ import { EventStore } from "../db/eventStore";
       );
     } catch (err) {
       console.log(err);
-      return "Error depositing into savings account.";
+      return `${err}`;
     }
     return "Savings account deposit successful.";
   }
@@ -77,7 +77,7 @@ import { EventStore } from "../db/eventStore";
       );
     } catch (err) {
       console.log(err);
-      return "Error withdrawing from savings account.";
+      return `${err}`;
     }
     return "Savings account withdrawal successful.";
   }

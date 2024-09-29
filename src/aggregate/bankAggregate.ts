@@ -45,6 +45,9 @@ class BankAggregate {
     }
 
     withdrawChequingAcct(userId: string, amount: number): ChequingWithdrawalEvent {
+        if ((this.chequingAcctBalance ?? 0) - amount < 0) {
+            throw new Error('Insufficient funds');
+        }
         const id = generateId();
         const event = new ChequingWithdrawalEvent(id, userId, ChequingWithdrawalEvent.eventType, amount, this.version + 1);
         this.applyState(event);
@@ -59,6 +62,9 @@ class BankAggregate {
     }
 
     withdrawSavingsAcct(userId: string, amount: number): SavingsWithdrawalEvent {
+        if ((this.savingsAcctBalance ?? 0) - amount < 0) {
+            throw new Error('Insufficient funds.');
+        }
         const id = generateId();
         const event = new SavingsWithdrawalEvent(id, userId, SavingsWithdrawalEvent.eventType, amount, this.version + 1);
         this.applyState(event);
