@@ -46,7 +46,6 @@ class BankAggregate {
 
     withdrawChequingAcct(userId: string, amount: number): ChequingWithdrawalEvent {
         const id = generateId();
-        this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) - amount;
         const event = new ChequingWithdrawalEvent(id, userId, ChequingWithdrawalEvent.eventType, amount, this.version + 1);
         this.applyState(event);
         return event;
@@ -54,7 +53,6 @@ class BankAggregate {
 
     depositSavingsAcct(userId: string, amount: number): SavingsDepositEvent {
         const id = generateId();
-        this.savingsAcctBalance = (this.savingsAcctBalance ?? 0) + amount;
         const event = new SavingsDepositEvent(id, userId, SavingsDepositEvent.eventType, amount, this.version + 1);
         this.applyState(event);
         return event;
@@ -62,7 +60,6 @@ class BankAggregate {
 
     withdrawSavingsAcct(userId: string, amount: number): SavingsWithdrawalEvent {
         const id = generateId();
-        this.savingsAcctBalance = (this.savingsAcctBalance ?? 0) - amount;
         const event = new SavingsWithdrawalEvent(id, userId, SavingsWithdrawalEvent.eventType, amount, this.version + 1);
         this.applyState(event);
         return event;
