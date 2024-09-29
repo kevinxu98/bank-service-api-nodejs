@@ -39,6 +39,7 @@ export class EventStore {
             });
             const response = await this.docClient.send(command);
             console.log(`Scan response: ${JSON.stringify(response)}`);
+            const sortedItems = response.Items?.sort((a: any, b: any) => a.version - b.version);
             return response.Items;
         } catch (error) {
             console.error(`Error scanning for events: ${error}`);
