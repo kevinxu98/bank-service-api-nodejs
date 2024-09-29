@@ -30,21 +30,6 @@ class BankAggregate {
         }
     }
 
-    applyState(event: any): void {
-        if (event.type = BankAcctCreatedEvent.eventType) {
-            this.id = event.userId;
-            this.version = event.version;
-            this.firstName = event.firstName;
-            this.lastName = event.lastName;
-            this.chequingAcctBalance = event.chequingAcctBalance;
-            this.savingsAcctBalance = event.savingsAcctBalance;
-        } else if (event.type = ChequingDepositEvent.eventType) {
-            this.id = event.userId;
-            this.version = event.version;
-            this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) + event.amount;
-        }
-    }
-
     createBankAcct(userId: string, firstName: string, lastName: string, chequingAcctBalance: number, savingsAcctBalance: number): BankAcctCreatedEvent {
         const id = generateId();
         const event = new BankAcctCreatedEvent(id, userId, BankAcctCreatedEvent.eventType, firstName, lastName, chequingAcctBalance, savingsAcctBalance, this.version + 1);
@@ -54,7 +39,6 @@ class BankAggregate {
 
     depositChequingAcct(userId: string, amount: number): ChequingDepositEvent {
         const id = generateId();
-        this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) + amount;
         const event = new ChequingDepositEvent(id, userId, ChequingDepositEvent.eventType, amount, this.version + 1);
         this.applyState(event);
         return event;
@@ -82,6 +66,33 @@ class BankAggregate {
         const event = new SavingsWithdrawalEvent(id, userId, SavingsWithdrawalEvent.eventType, amount, this.version + 1);
         this.applyState(event);
         return event;
+    }
+
+    applyState(event: any): void {
+        if (event.type === BankAcctCreatedEvent.eventType) {
+            this.id = event.userId;
+            this.version = event.version;
+            this.firstName = event.firstName;
+            this.lastName = event.lastName;
+            this.chequingAcctBalance = event.chequingAcctBalance;
+            this.savingsAcctBalance = event.savingsAcctBalance;
+        } else if (event.type === ChequingDepositEvent.eventType) {
+            this.id = event.userId;
+            this.version = event.version;
+            this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) + event.amount;
+        } else if (event.type === ChequingWithdrawalEvent.eventType) {
+            this.id = event.userId;
+            this.version = event.version;
+            this.chequingAcctBalance = (this.chequingAcctBalance ?? 0) - event.amount;
+        } else if (event.type === SavingsDepositEvent.eventType) {
+            this.id = event.userId;
+            this.version = event.version;
+            this.savingsAcctBalance = (this.savingsAcctBalance ?? 0) + event.amount;
+        } else if (event.type === SavingsWithdrawalEvent.eventType) {
+            this.id = event.userId;
+            this.version = event.version;
+            this.savingsAcctBalance = (this.savingsAcctBalance ?? 0) - event.amount;
+        }
     }
 
     projectionDisplay(): ProjectionDisplay {

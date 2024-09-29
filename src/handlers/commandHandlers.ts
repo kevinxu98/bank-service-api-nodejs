@@ -57,7 +57,7 @@ export class ChequingWithdrawalCommandHandler {
     async handle(command: any): Promise<any> {
         const { id, amount } = command;
         const bankAggregate = new BankAggregate(id);
-        bankAggregate.hydrateAggregate();
+        await bankAggregate.hydrateAggregate();
 
         const event = bankAggregate.withdrawChequingAcct(id, amount);
         const updatedProjection = bankAggregate.projectionDisplay();
@@ -78,7 +78,7 @@ export class SavingsDepositCommandHandler {
     async handle(command: any): Promise<any> {
         const { id, amount } = command;
         const bankAggregate = new BankAggregate(id);
-        bankAggregate.hydrateAggregate();
+        await bankAggregate.hydrateAggregate();
 
         const event = bankAggregate.depositSavingsAcct(id, amount);
         const updatedProjection = bankAggregate.projectionDisplay();
@@ -99,7 +99,7 @@ export class SavingsWithdrawalCommandHandler {
     async handle(command: any): Promise<any> {
         const { id, amount } = command;
         const bankAggregate = new BankAggregate(id);
-        bankAggregate.hydrateAggregate();
+        await bankAggregate.hydrateAggregate();
 
         const event = bankAggregate.withdrawSavingsAcct(id, amount);
         const updatedProjection = bankAggregate.projectionDisplay();
