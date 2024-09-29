@@ -3,6 +3,9 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import docClient from "./databaseConnection";
 import { ProjectionDisplay } from "../models/displays";
 import BankEventHandler from "../handlers/eventHandlers";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 export class EventStore {
@@ -16,7 +19,7 @@ export class EventStore {
         try {
             const newEvent = event;
             const command = new PutCommand({
-                TableName: "bankEventsTable", 
+                TableName: process.env.EVENTS_TABLE, 
                 Item: newEvent
             });
             await this.docClient.send(command);

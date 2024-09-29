@@ -2,6 +2,9 @@ import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import docClient from "./databaseConnection";
 import { ProjectionDisplay } from "../models/displays";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class ProjectionStore {
     private docClient: DynamoDBDocumentClient;
@@ -13,7 +16,7 @@ class ProjectionStore {
     async saveProjection(projectionDisplay: ProjectionDisplay): Promise<void> {
         try {
             const command = new PutCommand({
-                TableName: "bankProjectionsTable",
+                TableName: process.env.PROJECTIONS_TABLE,
                 Item: projectionDisplay
             });
             await this.docClient.send(command);
