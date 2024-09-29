@@ -1,4 +1,4 @@
-import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { PutCommand, QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import docClient from "./databaseConnection";
 import { ProjectionDisplay } from "../models/displays";
@@ -27,22 +27,26 @@ export class EventStore {
         await new BankEventHandler().updateProjections(updatedProjection);
     }
 
-    async getEvents(userId: string): Promise<any> {
+    async getEventsByUserId(userId: string): Promise<any> {
         try {
-            const command = new QueryCommand({
+            console.log(`Scanning for events with userId: ${userId}`);
+            const command = new ScanCommand({
                 TableName: "bankEventsTable",
-                KeyConditionExpression: "userId = :userId",
+                FilterExpression: "userId = :userId",
                 ExpressionAttributeValues: {
-                    ":userId": { S: userId }
+                    ":userId": userId // Use plain JavaScript object
                 }
             });
             const response = await this.docClient.send(command);
+            console.log(`Scan response: ${JSON.stringify(response)}`);
             return response.Items;
         } catch (error) {
+            console.error(`Error scanning for events: ${error}`);
             throw error;
         }
     }
-
 }
+
+
 
 export default EventStore;

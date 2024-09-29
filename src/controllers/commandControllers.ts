@@ -6,10 +6,11 @@ import {
     Post,
     Body,
     Path,
+    Put,
  } from "tsoa";
 import { BankCreationDTO } from "../dtos/dtos";
-import { CreateBankRecordCommand } from "../commands/commands";
-import { CreateBankRecordCommandHandler } from "../handlers/commandHandlers";
+import { ChequingDepositCommand, ChequingWithdrawalCommand, CreateBankRecordCommand, SavingsDepositCommand, SavingsWithdrawalCommand } from "../commands/commands";
+import { ChequingDepositCommandHandler, ChequingWithdrawalCommandHandler, CreateBankRecordCommandHandler, SavingsDepositCommandHandler, SavingsWithdrawalCommandHandler } from "../handlers/commandHandlers";
 import { EventStore } from "../db/eventStore";
 
  @Tags("Command Controllers")
@@ -29,4 +30,56 @@ import { EventStore } from "../db/eventStore";
     return "Bank record created successfully.";
   }
 
+  @Put("chequingDeposit/{id}/{amount}")
+  public async chequingDeposit(@Path() id: string, @Path() amount: number): Promise<any> {
+    try {
+      await new ChequingDepositCommandHandler(new EventStore()).handle(
+        new ChequingDepositCommand(id, amount)
+      );
+    } catch (err) {
+      console.log(err);
+      return "Error depositing into chequing account.";
+    }
+    return "Chequing account deposit successful.";
+  }
+
+  @Put("chequingWithdrawal/{id}/{amount}")
+  public async chequingWithdrawal(@Path() id: string, @Path() amount: number): Promise<any> {
+    try {
+      await new ChequingWithdrawalCommandHandler(new EventStore()).handle(
+        new ChequingWithdrawalCommand(id, amount)
+      );
+    } catch (err) {
+      console.log(err);
+      return "Error withdrawing from chequing account.";
+    }
+    return "Chequing account withdrawal successful.";
+  }
+
+  @Put("savingsDeposit/{id}/{amount}")
+  public async savingsDeposit(@Path() id: string, @Path() amount: number): Promise<any> {
+    try {
+      await new SavingsDepositCommandHandler(new EventStore()).handle(
+        new SavingsDepositCommand(id, amount)
+      );
+    } catch (err) {
+      console.log(err);
+      return "Error depositing into savings account.";
+    }
+    return "Savings account deposit successful.";
+  }
+
+  @Put("savingsWithdrawal/{id}/{amount}")
+  public async savingsWithdrawal(@Path() id: string, @Path() amount: number): Promise<any> {
+    try {
+      await new SavingsWithdrawalCommandHandler(new EventStore()).handle(
+        new SavingsWithdrawalCommand(id, amount)
+      );
+    } catch (err) {
+      console.log(err);
+      return "Error withdrawing from savings account.";
+    }
+    return "Savings account withdrawal successful.";
+  }
+  
  }
