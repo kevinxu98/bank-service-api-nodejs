@@ -6,7 +6,7 @@ const client = new DynamoDBClient({
   region: process.env.AWS_REGION || "us-east-1",
 });
 
-// dynamoDB Document client
+// dynamoDB doc client
 const docClient = DynamoDBDocumentClient.from(client);
 export default docClient;
 
