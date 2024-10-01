@@ -1,3 +1,4 @@
+import { dot } from "node:test/reporters";
 import { createTable } from "../db/databaseMethods";
 import {
     Controller,
@@ -8,6 +9,11 @@ import {
     Body,
     Path,
  } from "tsoa";
+import dotenv from "dotenv";
+
+dotenv.config();
+const eventsTable: string = process.env.EVENTS_TABLE || "defaultEventsTable";
+const projectionsTable: string = process.env.PROJECTIONS_TABLE || "defaultProjectionsTable";
 
  @Tags("Admin Controllers")
  @Route("admin")
@@ -16,7 +22,7 @@ import {
     @Post("create-table")
     public async createBankTables(): Promise<string> {
         try {
-            const bankCreationArray = [createTable("bankEventsTable"), createTable("bankProjectionsTable")];
+            const bankCreationArray = [createTable(eventsTable), createTable(projectionsTable)];
             await Promise.all(bankCreationArray);
             return "Tables created successfully.";
         } catch (error) {

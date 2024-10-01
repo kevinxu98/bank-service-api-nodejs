@@ -6,7 +6,7 @@ import BankEventHandler from "../handlers/eventHandlers";
 import dotenv from 'dotenv';
 
 dotenv.config();
-
+const eventsTable: string = process.env.EVENTS_TABLE || "defaultEventsTable";
 
 export class EventStore {
     private docClient: DynamoDBDocumentClient;
@@ -34,7 +34,7 @@ export class EventStore {
         try {
             console.log(`Scanning for events with userId: ${userId}`);
             const command = new ScanCommand({
-                TableName: "bankEventsTable",
+                TableName: eventsTable,
                 FilterExpression: "userId = :userId",
                 ExpressionAttributeValues: {
                     ":userId": userId
