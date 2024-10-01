@@ -26,6 +26,23 @@ class ProjectionStore {
         }
     }
 
+    async getProjection(id: string): Promise<ProjectionDisplay> {
+        try {
+            const command = new QueryCommand({
+                TableName: process.env.PROJECTIONS_TABLE,
+                KeyConditionExpression: "id = :id",
+                ExpressionAttributeValues: {
+                    ":id": id
+                }
+            });
+            const response = await this.docClient.send(command);
+            return response.Items![0] as ProjectionDisplay;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
 
 export default ProjectionStore;
