@@ -4,9 +4,11 @@ import { RegisterRoutes } from "./routes/routes";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger/swagger.json";
 import { initializeDatabase } from "./db/databaseConnection";
+import cors from "cors";
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 // tsoa generated routes
 RegisterRoutes(app);
