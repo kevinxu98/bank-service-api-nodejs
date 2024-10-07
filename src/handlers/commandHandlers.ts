@@ -12,11 +12,10 @@ export class CreateBankRecordCommandHandler {
 
     async handle(command: CreateBankRecordCommand): Promise<any> {
         // create aggregate instance
-        const userId = generateId();
-        const bankAggregate = new BankAggregate(userId);
+        const bankAggregate = new BankAggregate(command.userId);
         const { firstName, lastName, chequingAcctBalance, savingsAcctBalance } = command;
 
-        const event = bankAggregate.createBankAcct(userId, firstName, lastName, chequingAcctBalance, savingsAcctBalance);
+        const event = bankAggregate.createBankAcct(command.userId, firstName, lastName, chequingAcctBalance, savingsAcctBalance);
         const updatedProjection = bankAggregate.projectionDisplay();
 
         // save the event to the event store

@@ -17,11 +17,11 @@ import { EventStore } from "../db/eventStore";
  @Route("commands")
  export class CommandController extends Controller {
 
-  @Post("createBankRecord/{firstName}/{lastName}")
+  @Post("createBankRecord")
   public async createBankRecord(@Body() body: BankCreationDTO): Promise<any> {
     try {
       await new CreateBankRecordCommandHandler(new EventStore()).handle(
-        new CreateBankRecordCommand(body.firstName, body.lastName, body.chequingAcctBalance, body.savingsAcctBalance)
+        new CreateBankRecordCommand(body.userId, body.firstName, body.lastName, body.chequingAcctBalance, body.savingsAcctBalance)
       );
     } catch (err) {
       console.log(err);
