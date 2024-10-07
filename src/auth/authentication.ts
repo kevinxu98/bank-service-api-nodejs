@@ -9,15 +9,15 @@ export const expressAuthentication = async (request: Request, securityName: stri
     if (securityName === 'jwt') {
         const token = request.header('Authorization')?.split(' ')[1];
         if (!token) {
-            throw new Error('No token provided');
+            throw new Error('No token provided.');
         }
 
         try {
             const decoded = jwt.verify(token, supabaseJwtSecret);
             return decoded;
         } catch (err) {
-            throw new Error('Invalid token');
+            throw new Error('Invalid token.');
         }
     }
-    throw new Error('Unsupported security name');
+    throw new Error('Unsupported security name.');
 };

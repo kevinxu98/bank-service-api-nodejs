@@ -7,7 +7,7 @@ dotenv.config();
 const supabaseJwtSecret = process.env.SUPABASE_JWT_SECRET;
 
 if (!supabaseJwtSecret) {
-  throw new Error('SUPABASE_JWT_SECRET is not defined in .env file');
+  throw new Error('SUPABASE_JWT_SECRET is not defined in .env file.');
 }
 
 declare module 'express-serve-static-core' {
@@ -20,7 +20,7 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
   const token = req.header('Authorization')?.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'Access token is missing or invalid' });
+    return res.status(401).json({ message: 'Access token is missing or invalid.' });
   }
 
   try {
@@ -28,6 +28,6 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(403).json({ message: 'Invalid token' });
+    return res.status(403).json({ message: 'Invalid token.' });
   }
 };
