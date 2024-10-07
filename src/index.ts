@@ -5,10 +5,14 @@ import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger/swagger.json";
 import { initializeDatabase } from "./db/databaseConnection";
 import cors from "cors";
+import { authenticateJWT } from "./auth/authMiddleware"; 
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+
+// protect specific routes with JWT middleware
+app.use("/protected", authenticateJWT);
 
 // tsoa generated routes
 RegisterRoutes(app);

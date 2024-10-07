@@ -8,6 +8,7 @@ import {
     Post,
     Body,
     Path,
+    Security,
  } from "tsoa";
 import dotenv from "dotenv";
 
@@ -20,6 +21,7 @@ const projectionsTable: string = process.env.PROJECTIONS_TABLE || "defaultProjec
  export class AdminController extends Controller {
 
     @Post("create-table")
+    @Security("jwt")
     public async createBankTables(): Promise<string> {
         try {
             const bankCreationArray = [createTable(eventsTable), createTable(projectionsTable)];
