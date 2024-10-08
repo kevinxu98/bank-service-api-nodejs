@@ -7,6 +7,7 @@ import {
     Body,
     Path,
     Put,
+    Security,
  } from "tsoa";
 import { BankCreationDTO } from "../dtos/dtos";
 import { ChequingDepositCommand, ChequingWithdrawalCommand, CreateBankRecordCommand, SavingsDepositCommand, SavingsWithdrawalCommand } from "../commands/commands";
@@ -18,6 +19,7 @@ import { EventStore } from "../db/eventStore";
  export class CommandController extends Controller {
 
   @Post("createBankRecord")
+  @Security("jwt")
   public async createBankRecord(@Body() body: BankCreationDTO): Promise<any> {
     try {
       await new CreateBankRecordCommandHandler(new EventStore()).handle(
@@ -31,6 +33,7 @@ import { EventStore } from "../db/eventStore";
   }
 
   @Put("chequingDeposit/{id}/{amount}")
+  @Security("jwt")
   public async chequingDeposit(@Path() id: string, @Path() amount: number): Promise<any> {
     try {
       await new ChequingDepositCommandHandler(new EventStore()).handle(
@@ -44,6 +47,7 @@ import { EventStore } from "../db/eventStore";
   }
 
   @Put("chequingWithdrawal/{id}/{amount}")
+  @Security("jwt")
   public async chequingWithdrawal(@Path() id: string, @Path() amount: number): Promise<any> {
     try {
       await new ChequingWithdrawalCommandHandler(new EventStore()).handle(
@@ -57,6 +61,7 @@ import { EventStore } from "../db/eventStore";
   }
 
   @Put("savingsDeposit/{id}/{amount}")
+  @Security("jwt")
   public async savingsDeposit(@Path() id: string, @Path() amount: number): Promise<any> {
     try {
       await new SavingsDepositCommandHandler(new EventStore()).handle(
@@ -70,6 +75,7 @@ import { EventStore } from "../db/eventStore";
   }
 
   @Put("savingsWithdrawal/{id}/{amount}")
+  @Security("jwt")
   public async savingsWithdrawal(@Path() id: string, @Path() amount: number): Promise<any> {
     try {
       await new SavingsWithdrawalCommandHandler(new EventStore()).handle(
