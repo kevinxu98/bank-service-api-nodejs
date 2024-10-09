@@ -16,5 +16,8 @@ The API demonstrates read/write separation and allows separation of concerns bet
 Download or clone the repository and run the following commands to start local development:
 
 npm run docs
+
 npm run start
+
+![Swagger UI](public/swagger-ui.png)
 
